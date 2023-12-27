@@ -2,26 +2,32 @@ import "./style.css";
 import {Link} from "react-router-dom";
 import {Friends, HomeActive, Logo, Market, Search, Watch, Gaming, Menu, Notifications, ArrowDown, Messenger} from "../../svg";
 import {useSelector} from "react-redux";
+import SearchMenu from "./SearchMenu";
+import { useState } from "react";
 export default function Header() {
     const { user } = useSelector((user) => ({ ...user }));
-    console.log(user);
     const color = "#65676b";
+    const [showSearchMenu, setShowSearchMenu]= useState(false);
+
   return ( <header>
 
-    <div className="header_left">
+    <div className="header_left" >
+        
         <Link to="/" className="header_logo">
             <div className="circle">
                 <Logo/>
             </div>
         </Link>
-        <div className="search search1">
+        <div className="search search1" onClick={()=>{setShowSearchMenu(true)}}>
             <Search color={color} />
             <input type="text" 
             placeholder="Search Facebook"
             className="hide_input"
             />
         </div>
-    </div>
+        </div>
+    {showSearchMenu && <SearchMenu color = {color} setShowSearchMenu={setShowSearchMenu}/>}
+
     <div className="header_middle">
         <Link to="/" className="middle_icon hover1 active">
             <HomeActive/>
