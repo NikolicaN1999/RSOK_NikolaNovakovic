@@ -4,6 +4,7 @@ export default function Home() {
     <div>
       
       <Header />
+      <div className="card"></div>
 
     </div>
   )

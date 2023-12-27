@@ -75,3 +75,9 @@ a {
 }
 
 /*----Hovers----*/
+
+.card{
+  height: 500px;
+  width: 500%;
+  background: red;
+}
