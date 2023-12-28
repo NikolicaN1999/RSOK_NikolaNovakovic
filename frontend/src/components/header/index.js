@@ -12,9 +12,14 @@ export default function Header() {
     const color = "#65676b";
     const [showSearchMenu, setShowSearchMenu]= useState(false);
     const [showAllMenu, setShowAllMenu]= useState(false);
+    const [showUserMenu, setShowUserMenu]= useState(false);
     const allmenu = useRef(null);
+    const usermenu = useRef(null);
     useClickOutside(allmenu, () => {
         setShowAllMenu(false);
+    });
+    useClickOutside(usermenu, () => {
+        setShowUserMenu(false);
     });
 
   return ( <header>
@@ -60,12 +65,15 @@ export default function Header() {
             <span>{user?.first_name}</span>
         </Link>
         <div className="circle_icon hover1"
-            ref={allmenu}
-        onClick={()=>{
-            setShowAllMenu((prev) => !prev);
-        }}
-        >
+            ref={allmenu} >
+        <div onClick={()=>{
+            setShowAllMenu((prev) => !prev); }}
+            
+            >
             <Menu />
+            </div>
+       
+            
             {
                 showAllMenu && <AllMenu />
             }
@@ -78,9 +86,18 @@ export default function Header() {
             <Notifications />
             <div className="right_notification">5</div>
         </div>
-        <div className="circle_icon hover1">
-            <ArrowDown />
-            <UserMenu user={user}/>
+        <div className="circle_icon hover1" 
+        ref={usermenu}>
+            <div onClick={()=>{
+            setShowUserMenu((prev) => !prev);
+            }}>
+             <ArrowDown />
+            </div>
+            
+            {
+                showUserMenu && <UserMenu user={user}/>
+            }
+            
         </div>
         
     </div>
