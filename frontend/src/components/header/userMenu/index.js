@@ -28,12 +28,10 @@ export default function UserMenu({ user }) {
             </div>
           </div>
           <div className="mmenu_splitter"></div>
-          <div
-            className="mmenu_item hover3"
-            onClick={() => {
-              setVisible(1);
-            }}
-          >
+          <div className="mmenu_item hover3" 
+          onClick={()=>{
+            setVisible(1);
+            }}>
             <div className="small_circle">
               <i className="settings_filled_icon"></i>
             </div>
@@ -42,7 +40,6 @@ export default function UserMenu({ user }) {
               <i className="right_icon"></i>
             </div>
           </div>
-      
           <div className="mmenu_item hover3">
             <div className="small_circle">
               <i className="logout_filled_icon"></i>
@@ -51,7 +48,7 @@ export default function UserMenu({ user }) {
           </div>
         </div>
       )}
-      {visible === 1 && <SettingsPrivacy setVisible={setVisible} />}
+      {visible === 1 && <SettingsPrivacy setVisible={setVisible}/>}
     </div>
   );
 }
