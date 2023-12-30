@@ -1,19 +1,14 @@
-import { useRef, useState } from "react";
-import Header from "../../components/header"
-import useClickOutside from "../../helpers/clickOutside";
+
+import { useSelector } from "react-redux";
+import Header from "../../components/header";
+import LeftHome from "../../components/home/left";
+
 export default function Home() {
-const [visible, setVisible] = useState(false);
-const el = useRef(null);
-  useClickOutside(el, () =>{
-    setVisible(false);
-    console.log("u clicked outside");
-  });
+  const { user } = useSelector((user) => ({ ...user }));
   return (
     <div>
-      
       <Header />
-      {visible && <div className="card" ref={el}></div>}
-
+      <LeftHome user={user} />
     </div>
-  )
+  );
 }
