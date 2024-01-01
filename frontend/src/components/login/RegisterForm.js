@@ -9,7 +9,8 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-export default function RegisterForm({setVisible}) {
+
+export default function RegisterForm({ setVisible }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfos = {
@@ -73,7 +74,6 @@ export default function RegisterForm({setVisible}) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
-
 
   const registerSubmit = async () => {
     try {
@@ -214,7 +214,8 @@ export default function RegisterForm({setVisible}) {
                 notifications from us and can opt out at any time.
               </div>
               <div className="reg_btn_wrapper">
-                <button className="blue_btn open_signup">Sign Up</button>
+                <button 
+                type="button" className="blue_btn open_signup" onClick={formik.handleSubmit}>Sign Up</button>
               </div>
               <DotLoader color="#1876f2" loading={loading} size={30} />
               {error && <div className="error_text">{error}</div>}
