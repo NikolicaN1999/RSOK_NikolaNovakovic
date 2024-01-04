@@ -2,9 +2,7 @@ import "./style.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { Form, Formik } from "formik";
 import { useState } from "react";
-import LoginInput from "../../components/inputs/loginInput";
 import SearchAccount from "./SearchAccount";
 import SendEmail from "./SendEmail";
 import CodeVerification from "./CodeVerification";
@@ -15,7 +13,7 @@ export default function Reset() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [visible, setVisible] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [laoding,setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
@@ -95,6 +93,11 @@ export default function Reset() {
             conf_password={conf_password}
             setConf_password={setConf_password}
             setPassword={setPassword}
+            error={error}
+            setError={setError}
+            setLoading={setLoading}
+            setVisible={setVisible}
+            userInfos={userInfos}
           />
         )}
       </div>
