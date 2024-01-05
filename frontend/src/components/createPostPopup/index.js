@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import "./style.css";
 import Picker from "emoji-picker-react";
+import EmojiPickerBackgrounds from "./EmojiPickerBackgrounds";
+import AddToYourPost from "./AddToYourPost";
 export default function CreatePostPopup({ user }) {
   const [text, setText] = useState("");
   const [showPrev, setShowPrev] = useState(false);
-  const [picker, setPicker] = useState(true);
+  const [picker, setPicker] = useState(false);
   const textRef = useRef(null);
   const [cursorPosition, setCursorPosition] = useState();
-  useEffect(()=>{
-textRef.current.selectionEnd = cursorPosition;
-  }, [cursorPosition])
-  const handleEmoji = ({emoji})=>{
+  useEffect(() => {
+    textRef.current.selectionEnd = cursorPosition;
+  }, [cursorPosition]);
+  const handleEmoji = ({ emoji }) => {
     const ref = textRef.current;
     ref.focus();
     const start = text.substring(0, ref.selectionStart);
@@ -44,6 +46,7 @@ textRef.current.selectionEnd = cursorPosition;
         </div>
 
         {!showPrev && (
+          <>
           <div className="flex_center">
             <textarea
               ref={textRef}
@@ -54,21 +57,15 @@ textRef.current.selectionEnd = cursorPosition;
               onChange={(e) => setText(e.target.value)}
             ></textarea>
           </div>
+          <EmojiPickerBackgrounds
+              text={text}
+              textRef={textRef}
+              setText={setText}
+            />
+          </>
         )}
-        <div className="post_emojis_wrap">
-          {picker && (
-            <div className="comment_emoji_picker rlmove">
-              <Picker onEmojiClick={handleEmoji} />
-            </div>
-          )}
-          <img src="../../../icons/colorful.png" alt="" />
-          <i
-            className="emoji_icon_large"
-            onClick={() => {
-              setPicker((prev) => !prev);
-            }}
-          ></i>
-        </div>
+         <AddToYourPost />
+        <button className="post_submit">Post</button>
       </div>
     </div>
   );
