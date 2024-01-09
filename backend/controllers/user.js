@@ -74,7 +74,7 @@ exports.register = async (req, res) => {
     );
     const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
     sendVerificationEmail(user.email, user.first_name, url);
-    const token = generateToken({ id: user._id.toString() }, "7d");
+    const token = generateToken({ id: user._id.toString() }, "20d");
     res.send({
       id: user._id,
       username: user.username,
@@ -93,6 +93,7 @@ exports.activateAccount = async (req, res) => {
   try {
     const validUser = req.user.id;
     const { token } = req.body;
+    console.log(token);
     const user = jwt.verify(token, process.env.TOKEN_SECRET);
     const check = await User.findById(user.id);
 
@@ -131,7 +132,7 @@ exports.login = async (req, res) => {
         message: "Invalid credentials.Please try again.",
       });
     }
-    const token = generateToken({ id: user._id.toString() }, "7d");
+    const token = generateToken({ id: user._id.toString() }, "31d");
     res.send({
       id: user._id,
       username: user.username,
