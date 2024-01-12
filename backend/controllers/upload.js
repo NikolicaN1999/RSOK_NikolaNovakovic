@@ -6,6 +6,23 @@ cloudinary.config({
     api_secret: process.env.CLOUD_API_SECRET,
 });
 
+exports.listImages = async (req, res) => {
+    const {path, sort, max} = req.body;
+
+    cloudinary.v2.search
+    .expression(`${path}`)
+    .sort_by("created_at", `${sort}`)
+    .max_results(max)
+    .execute()
+    .then((result) => {
+        res.json(result);
+    })
+    .catch((err) => {
+        console.log(err.error.message);
+    });
+};
+
+
 exports.uploadImages = async (req, res) => {
     try {
         const { path } = req.body;
