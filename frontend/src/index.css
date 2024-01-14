@@ -80,6 +80,13 @@ a {
   z-index: 99;
 }
 
+.blue_btn span {
+  transform: translateY(-1px);
+}
+
+.gray_btn span {
+  transform: translateY(-1px);
+}
 /*---Buttons---*/
 
 /*----Hovers----*/
