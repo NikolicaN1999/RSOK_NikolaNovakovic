@@ -1,14 +1,18 @@
-import { useCallback, useState} from "react";
-import { useRef } from "react";
-import Crooper from "react-easy-crop";
-export default function UpdateProfilePicture( {image, setImage} ) {
+
+import { useCallback, useRef, useState } from "react";
+import Cropper from "react-easy-crop";
+import { useSelector } from "react-redux";
+import getCroppedImg from "../../helpers/getCroppedImg";
+export default function UpdateProfilePicture( {image, setImage, setError} ) {
     const [description, setDescription] = useState("");
-    const [crop, setCrop] = useState({ x: 0, y: 0 })
-    const [zoom, setZoom] = useState(1)
+    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const slider = useRef(null);
+    const { user } = useSelector((state) => ({...state}));
   
     const onCropComplete = useCallback ((croppedArea, croppedAreaPixels) => {
-      console.log(croppedArea, croppedAreaPixels)
+      setCroppedAreaPixels(croppedAreaPixels);
     }, []);
     const zoomIn = () => {
         slider.current.stepUp();
@@ -18,7 +22,35 @@ export default function UpdateProfilePicture( {image, setImage} ) {
         slider.current.stepDown();
         setZoom(slider.current.value);
     };
-    console.log(zoom);
+   const getCroppedImage = useCallback (async (show) => {
+    try {
+        const img = await getCroppedImg(image, croppedAreaPixels);
+        if (show){
+            setZoom(1);
+            setImage(img);
+            setCrop( { x:0, y:0});
+             console.log("just show");
+        } else {
+            console.log("not show");
+            console.log(img); 
+            return img;
+        } 
+    } catch (error) {
+        console.log(error);
+    }
+   }, [croppedAreaPixels]);
+
+   
+ const UpdateProfilePicture = async ()=> {
+    try {
+     let img = await getCroppedImage();
+     let blob = await fetch(img).then((b) => b.blob());
+     const path =  `${user.username}/profile_pictures`;
+   
+    } catch (error) {
+        setError(error.response.data.error);
+    }
+ };
   return (
     <div className="postBox update_img">
     <div className="box_header">
@@ -36,7 +68,7 @@ export default function UpdateProfilePicture( {image, setImage} ) {
     </div>
     <div className="update_center">
         <div className="crooper">
-            <Crooper
+            <Cropper
             image = {image}
             crop = {crop}
             zoom = {zoom}
@@ -59,7 +91,7 @@ export default function UpdateProfilePicture( {image, setImage} ) {
         </div>
         </div>
         <div className="flex_up">
-            <div className="gray_btn">
+            <div className="gray_btn" onClick={()=> getCroppedImage("show")}>
                 <i className="crop_icon"></i>
                 Crop photo
             </div>
@@ -75,7 +107,7 @@ export default function UpdateProfilePicture( {image, setImage} ) {
         </div>
         <div className="update_submit_wrap">
             <div className="blue_link">Cancel</div>
-            <div className="blue_btn">Save</div>
+            <div className="blue_btn" onClick={()=> UpdateProfilePicture()}>Save</div>
         </div>
     </div>
   );
