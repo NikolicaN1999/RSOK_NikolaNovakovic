@@ -9,8 +9,9 @@ import Cover from "./Cover";
 import ProfilePictureInfos from "./ProfilePictureInfos";
 import ProfileMenu from "./ProfileMenu";
 import PplYouMayKnow from "./PplYouMayKnow";
-
-export default function Profile() {
+import CreatePost from "../../components/createPost";
+import Post from "../../components/post";
+export default function Profile( {setVisible} ) {
     const { username } = useParams();
     const navigate = useNavigate();
     const { user } = useSelector((state) => ({...state }));
@@ -23,6 +24,8 @@ export default function Profile() {
       useEffect(() => {
         getProfile();
       }, [userName]);
+      var visitor = userName === user.username ? false : true;
+      console.log(visitor);
       const getProfile = async () => {
         try {
             dispatch({
@@ -52,14 +55,14 @@ export default function Profile() {
             });
           }
         };
-        
+       console.log(profile); 
         return (
             <div className="profile">
                 <Header page="profile" />
                 <div className="profile_top">
                     <div className="profile_container">
-                     <Cover cover={profile.cover} />
-                     <ProfilePictureInfos profile={profile}/>
+                     <Cover cover={profile.cover} visitor={visitor}/>
+                     <ProfilePictureInfos profile={profile} visitor={visitor}/>
                      <ProfileMenu />
                     </div>
                 </div>
@@ -67,6 +70,26 @@ export default function Profile() {
                   <div className="profile_container">
                     <div className="bottom_container">
                       <PplYouMayKnow />
+                      <div className="profile_grid">
+                        <div className="profile_left"> </div>
+                        <div className="profile_right">
+                          {
+                            !visitor && (
+                              <CreatePost user={user} profile setVisible={setVisible}/>
+                            )
+                          }
+                          <div className="posts">
+                            {   profile.posts &&
+                                profile.posts.length ? (
+                                profile.posts.map((post) => (
+                                  <Post post={post} user={user} key={post._id}/>
+                                ))
+                                ) :  (
+                            <div className="no_posts">No posts available</div>
+                            ) }
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

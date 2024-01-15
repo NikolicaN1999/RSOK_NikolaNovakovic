@@ -227,7 +227,28 @@
   .pplumayknow_list .light_blue_btn {
     color: var(--blue-color);
   }
+  .profile_grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 10px;
+  }
   /*------ppl u may know------*/
+
+  .othername {
+    color: var(--color-secondary);
+    font-size: 20px;
+  }
+  .no_posts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--color-secondary);
+  }
+
+
+
   /*--Menu-------*/
   @media (max-width: 900px) {
     .profile_w_left {
@@ -249,9 +270,14 @@
     }
     .profile_name {
       padding-bottom: 10px;
+      flex-direction: column;
     }
     .pplumayknow {
       display: none;
+    }
+    .profile_grid {
+      grid-template-columns: 1fr;
+      width: 95%;
     }
   }
   
