@@ -17,7 +17,6 @@ export default function UpdateProfilePicture({ setImage, image, setError, setSho
   const slider = useRef(null);
   const { user } = useSelector((state) => ({ ...state }));
   const [loading, setLoading] =useState(false);
-  
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);

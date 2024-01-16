@@ -10,7 +10,6 @@ export default function Post({ post, user, profile }) {
   const [visible, setVisible] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
-
   return (
     <div className="post" style={{ width: `${profile && "100%"}` }}>
       <div className="post_header">
@@ -23,11 +22,11 @@ export default function Post({ post, user, profile }) {
             <div className="post_profile_name">
               {post.user.first_name} {post.user.last_name}
               <div className="updated_p">
-                {post.type === "profilePicture" &&
+                {post.type == "profilePicture" &&
                   `updated ${
                     post.user.gender === "male" ? "his" : "her"
                   } profile picture`}
-                {post.type === "cover" &&
+                {post.type == "cover" &&
                   `updated ${
                     post.user.gender === "male" ? "his" : "her"
                   } cover picture`}
@@ -41,8 +40,10 @@ export default function Post({ post, user, profile }) {
             </div>
           </div>
         </Link>
-        <div className="post_header_right hover1" 
-        onClick={() => setShowMenu((prev) => !prev)}>
+        <div
+          className="post_header_right hover1"
+          onClick={() => setShowMenu((prev) => !prev)}
+        >
           <Dots color="#828387" />
         </div>
       </div>
@@ -53,7 +54,7 @@ export default function Post({ post, user, profile }) {
         >
           <div className="post_bg_text">{post.text}</div>
         </div>
-      ) : (
+      ) : post.type === null ? (
         <>
           <div className="post_text">{post.text}</div>
           {post.images && post.images.length && (
@@ -81,7 +82,21 @@ export default function Post({ post, user, profile }) {
             </div>
           )}
         </>
+      ) : post.type === "profilePicture" ? (
+        <div className="post_profile_wrap">
+          <div className="post_updated_bg">
+            <img src={post.user.cover} alt="" />
+          </div>
+          <img
+            src={post.images[0].url}
+            alt=""
+            className="post_updated_picture"
+          />
+        </div>
+      ) : (
+        <div className="post_cover_wrap"></div>
       )}
+
       <div className="post_infos">
         <div className="reacts_count">
           <div className="reacts_count_imgs"></div>
@@ -119,11 +134,11 @@ export default function Post({ post, user, profile }) {
           <span>Share</span>
         </div>
       </div>
-      <div className="comments_wrap">
+      <div className="comments_wrap"> 
         <div className="comments_order"></div>
-        <CreateComment  user={user}/>
+        <CreateComment user={user} />
       </div>
-      { showMenu && (
+      {showMenu && (
         <PostMenu
           userId={user.id}
           postUserId={post.user._id}
