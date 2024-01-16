@@ -1,19 +1,22 @@
 import axios from "axios";
 import { useCallback, useRef, useState } from "react";
 import Cropper from "react-easy-crop";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createPost } from "../../functions/post";
 import { uploadImages } from "../../functions/uploadImages";
 import { updateprofilePicture } from "../../functions/user";  
 import getCroppedImg from "../../helpers/getCroppedImg";
-
-export default function UpdateProfilePicture({ setImage, image, setError }) {
+import PulseLoader from "react-spinners/PulseLoader";
+import Cookies from "js-cookie";
+export default function UpdateProfilePicture({ setImage, image, setError, setShow, pRef, }) {
+  const dispatch = useDispatch();
   const [description, setDescription] = useState("");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const slider = useRef(null);
   const { user } = useSelector((state) => ({ ...state }));
+  const [loading, setLoading] =useState(false);
   
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -37,10 +40,10 @@ export default function UpdateProfilePicture({ setImage, image, setError }) {
           setZoom(1);
           setCrop({ x: 0, y: 0 });
           setImage(img);
-          console.log("just show");
+          
         } else {
-          console.log("not show");
-          console.log(img);
+         
+          
           return img;
         }
       } catch (error) {
@@ -51,25 +54,21 @@ export default function UpdateProfilePicture({ setImage, image, setError }) {
     [croppedAreaPixels, image, setImage]
   );
 
-  const azuriranje = async () => {
+  const update = async () => {
     try {
+      setLoading(true);
       let img = await getCroppedImage();
       let blob = await fetch(img).then((b) => b.blob());
       const path = `${user.username}/profile_picture`;
       let formData = new FormData();
       formData.append("file", blob);
       formData.append("path", path);
-      
-      
+  
       const res = await uploadImages(formData, path, user.token);
-      
-      const updatedPicture = await updateprofilePicture(
-        res[0].url,  // 
-        user.token
-      );
-      console.log("Pre createPost");
-      if (updatedPicture === "ok") {
-        const newPost = await createPost(
+  
+      const updated_picture = await updateprofilePicture(res[0].url, user.token);
+      if (updated_picture === "ok") {
+        const new_post = await createPost(
           "profilePicture",
           null,
           description,
@@ -77,20 +76,35 @@ export default function UpdateProfilePicture({ setImage, image, setError }) {
           user.id,
           user.token
         );
-        console.log("Nakon createPost", newPost);
-
-        if (newPost === "ok") {
-          
+        if (new_post === "ok") {
+          setLoading(false);
+          setImage("");
+          pRef.current.style.backgroundImage = `url(${res[0].url})`;
+          const userData = {
+            ...user,
+            picture: res[0].url,
+          };
+          Cookies.set("user", JSON.stringify(userData));
+          dispatch ({
+            type: "UPDATEPICTURE",
+            payload: res[0].url,
+          });
+          setShow(false);
         } else {
-          setError(newPost);
+          setLoading(false);
+          setError(new_post);
         }
       } else {
-        setError(updatedPicture);
+        setLoading(false);
+        setError(updated_picture);
       }
     } catch (error) {
-      setError(error.response?.data?.message || "Unexpected error");
+      setLoading(false);
+      setError(error.response.data.message);
     }
-  }
+  };
+
+   
   return (
     <div className="postBox update_img">
       <div className="box_header">
@@ -153,9 +167,9 @@ export default function UpdateProfilePicture({ setImage, image, setError }) {
         Your profile picture is public
       </div>
       <div className="update_submit_wrap">
-        <div className="blue_link">Cancel</div>
-        <button className="blue_btn" onClick={() => azuriranje()}>
-          Save
+        <div className="blue_link" onClick={()=> setImage("")}>Cancel</div>
+        <button className="blue_btn" disabled={loading} onClick={() => update()}>
+         {loading ? <PulseLoader color="#fff" size={5} /> : "Save"}
         </button>
       </div>
     </div>
