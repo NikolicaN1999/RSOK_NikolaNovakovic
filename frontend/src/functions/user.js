@@ -1,5 +1,5 @@
 import axios from "axios";
-export const UpdateProfilePicture = async (url, token) => {
+export const updateprofilePicture = async (url, token) => {
   try {
     const { data } = await axios.put(
       `${process.env.REACT_APP_BACKEND_URL}/updateProfilePicture`,

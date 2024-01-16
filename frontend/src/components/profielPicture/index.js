@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import "./style.css";
 import UpdateProfilePicture from "./UpdateProfilePicture";
-export default function ProfilePicture({ username }) {
+export default function ProfielPicture({ username }) {
   const refInput = useRef(null);
   const [image, setImage] = useState("");
   const [error, setError] = useState("");

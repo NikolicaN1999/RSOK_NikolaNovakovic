@@ -254,11 +254,12 @@ exports.getProfile = async (req, res) => {
 exports.updateProfilePicture = async (req, res) => {
   try {
     const { url } = req.body;
-    const res = await User.findByIdAndUpdate(req.user._id, {
+    await User.findByIdAndUpdate(req.user._id, {
       picture: url,
     });
     res.json(url);
   } catch (error) {
+    console.error("Greška prilikom ažuriranja profilne slike:", error);
     res.status(500).json({ message:error.message });
   }
 };
