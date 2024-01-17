@@ -72,15 +72,22 @@ export default function Cover({ cover, visitor }) {
 
   const updateCoverPicture = async () => {
     try {
-      setLoading(true);
-      let img = await getCroppedImage();
-      let blob = await fetch(img).then((b) => b.blob());
-      const path = `${user.username}/cover_pictures`;
-      let formData = new FormData();
-      formData.append("file", blob);
-      formData.append("path", path);
-      const res = await uploadImages(formData, path, user.token);
-      const updated_picture = await updateCover(res[0].url, user.token);
+
+    console.log("Before getCroppedImage:", user, coverPicture, croppedAreaPixels);
+    setLoading(true);
+    let img = await getCroppedImage();
+    console.log("After getCroppedImage:", img);
+    let blob = await fetch(img).then((b) => b.blob());
+    console.log("Blob:", blob);
+    const path = `${user.username}/cover_pictures`;
+    let formData = new FormData();
+    formData.append("file", blob);
+    formData.append("path", path);
+    const res = await uploadImages(formData, path, user.token);
+    console.log("Response from uploadImages:", res);
+    console.log("Before updateCover:", res[0].url, user.token);
+    const updated_picture = await updateCover(res[0].url, user.token);
+    console.log("After updateCover:", updated_picture);
       if (updated_picture === "ok") {
         const new_post = await createPost(
           "coverPicture",
@@ -90,7 +97,7 @@ export default function Cover({ cover, visitor }) {
           user.id,
           user.token
         );
-        console.log(new_post);
+      
         if (new_post === "ok") {
           setLoading(false);
           setCoverPicture("");
@@ -105,6 +112,7 @@ export default function Cover({ cover, visitor }) {
 
         setError(updated_picture);
       }
+  
     } catch (error) {
       setLoading(false);
       setError(error.response.data.message);
