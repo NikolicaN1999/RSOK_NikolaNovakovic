@@ -72,7 +72,7 @@ export default function ProfielPicture({ username, setShow, pRef, photos}) {
           <h4> your profile pictures</h4>
           <div className="old_pictures">
           {
-            photos.filter(img=>img.folder === `${user.username}/profile_picture`).map((photo)=>(
+            photos.filter(img=>img.folder === `${user.username}/profile_pictures`).map((photo)=>(
               <img src={photo.secure_url} key={photo.public_id} alt="" onClick={()=> setImage(photo.secure_url)} />
             ))}
 
@@ -80,7 +80,7 @@ export default function ProfielPicture({ username, setShow, pRef, photos}) {
           <h4> other pictures</h4>
           <div className="old_pictures">
           {
-            photos.filter(img=>img.folder !== `${user.username}/profile_picture`).map((photo)=>(
+            photos.filter(img=>img.folder !== `${user.username}/post_images`).map((photo)=>(
               <img src={photo.secure_url} key={photo.public_id} alt=""onClick={()=> setImage(photo.secure_url)}/>
             ))}
 
