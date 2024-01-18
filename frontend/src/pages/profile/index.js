@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { profileReducer } from "../../functions/reducers";
@@ -29,7 +29,12 @@ export default function Profile({ setVisible }) {
   useEffect(() => {
     getProfile();
   }, [userName]);
+  useEffect(() => {
+    setOthername(profile?.details?.otherName);
+  }, [profile]);
+
   var visitor = userName === user.username ? false : true;
+  const [othername, setOthername] = useState();
   const path = `${userName}/*`;
   const max = 30;
   const sort = "desc";
@@ -76,14 +81,22 @@ export default function Profile({ setVisible }) {
       });
     }
   };
-
   return (
     <div className="profile">
       <Header page="profile" />
       <div className="profile_top">
         <div className="profile_container">
-          <Cover cover={profile.cover} visitor={visitor} />
-          <ProfielPictureInfos profile={profile} visitor={visitor} photos={photos.resources} />
+          <Cover
+            cover={profile.cover}
+            visitor={visitor}
+            photos={photos.resources}
+          />
+          <ProfielPictureInfos
+            profile={profile}
+            visitor={visitor}
+            photos={photos.resources}
+            othername={othername}
+          />
           <ProfileMenu />
         </div>
       </div>
@@ -93,8 +106,16 @@ export default function Profile({ setVisible }) {
             <PplYouMayKnow />
             <div className="profile_grid">
               <div className="profile_left">
-                <Intro detailss ={profile.details}/>
-                <Photos username={userName} token={user.token} photos={photos}/>
+                <Intro
+                  detailss={profile.details}
+                  visitor={visitor}
+                  setOthername={setOthername}
+                />
+                <Photos
+                  username={userName}
+                  token={user.token}
+                  photos={photos}
+                />
                 <Friends friends={profile.friends} />
                 <div className="relative_fb_copyright">
                   <Link to="/">Privacy </Link>
@@ -117,7 +138,7 @@ export default function Profile({ setVisible }) {
                 {!visitor && (
                   <CreatePost user={user} profile setVisible={setVisible} />
                 )}
-                
+               
                 <div className="posts">
                   {profile.posts && profile.posts.length ? (
                     profile.posts.map((post) => (
