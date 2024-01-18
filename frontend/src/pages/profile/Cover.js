@@ -74,22 +74,15 @@ export default function Cover({ cover, visitor, photos }) {
 
   const updateCoverPicture = async () => {
     try {
-
-    console.log("Before getCroppedImage:", user, coverPicture, croppedAreaPixels);
-    setLoading(true);
-    let img = await getCroppedImage();
-    console.log("After getCroppedImage:", img);
-    let blob = await fetch(img).then((b) => b.blob());
-    console.log("Blob:", blob);
-    const path = `${user.username}/cover_pictures`;
-    let formData = new FormData();
-    formData.append("file", blob);
-    formData.append("path", path);
-    const res = await uploadImages(formData, path, user.token);
-    console.log("Response from uploadImages:", res);
-    console.log("Before updateCover:", res[0].url, user.token);
-    const updated_picture = await updateCover(res[0].url, user.token);
-    console.log("After updateCover:", updated_picture);
+      setLoading(true);
+      let img = await getCroppedImage();
+      let blob = await fetch(img).then((b) => b.blob());
+      const path = `${user.username}/cover_pictures`;
+      let formData = new FormData();
+      formData.append("file", blob);
+      formData.append("path", path);
+      const res = await uploadImages(formData, path, user.token);
+      const updated_picture = await updateCover(res[0].url, user.token);
       if (updated_picture === "ok") {
         const new_post = await createPost(
           "coverPicture",
@@ -99,7 +92,7 @@ export default function Cover({ cover, visitor, photos }) {
           user.id,
           user.token
         );
-      
+        console.log(new_post);
         if (new_post === "ok") {
           setLoading(false);
           setCoverPicture("");
@@ -114,7 +107,6 @@ export default function Cover({ cover, visitor, photos }) {
 
         setError(updated_picture);
       }
-  
     } catch (error) {
       setLoading(false);
       setError(error.response.data.message);
@@ -185,7 +177,10 @@ export default function Cover({ cover, visitor, photos }) {
           </div>
           {showCoverMenu && (
             <div className="open_cover_menu" ref={menuRef}>
-              <div className="open_cover_menu_item hover1" onClick={()=> setShow(true)}>
+              <div
+                className="open_cover_menu_item hover1"
+                onClick={() => setShow(true)}
+              >
                 <i className="photo_icon"></i>
                 Select Photo
               </div>
@@ -200,7 +195,13 @@ export default function Cover({ cover, visitor, photos }) {
           )}
         </div>
       )}
-      { show && <OldCovers photos={photos} setCoverPicture={setCoverPicture} setShow={setShow}/>}
+      {show && (
+        <OldCovers
+          photos={photos}
+          setCoverPicture={setCoverPicture}
+          setShow={setShow}
+        />
+      )}
     </div>
   );
 }

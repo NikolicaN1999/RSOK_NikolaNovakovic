@@ -8,6 +8,7 @@ const Post = require("../models/Post");
 const Code = require("../models/Code");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const cloudinary = require("cloudinary");
 const { generateToken } = require("../helpers/tokens");
 const { sendVerificationEmail, sendResetCode } = require("../helpers/mailer");
 const generateCode = require("../helpers/generateCode");
@@ -75,7 +76,7 @@ exports.register = async (req, res) => {
     );
     const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
     sendVerificationEmail(user.email, user.first_name, url);
-    const token = generateToken({ id: user._id.toString() }, "20d");
+    const token = generateToken({ id: user._id.toString() }, "7d");
     res.send({
       id: user._id,
       username: user.username,
@@ -94,7 +95,6 @@ exports.activateAccount = async (req, res) => {
   try {
     const validUser = req.user.id;
     const { token } = req.body;
-    console.log(token);
     const user = jwt.verify(token, process.env.TOKEN_SECRET);
     const check = await User.findById(user.id);
 
@@ -133,7 +133,7 @@ exports.login = async (req, res) => {
         message: "Invalid credentials.Please try again.",
       });
     }
-    const token = generateToken({ id: user._id.toString() }, "31d");
+    const token = generateToken({ id: user._id.toString() }, "7d");
     res.send({
       id: user._id,
       username: user.username,
@@ -191,7 +191,7 @@ exports.sendResetPasswordCode = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email }).select("-password");
-    await Code.findOneAndDelete({ user: user._id });
+    await Code.findOneAndRemove({ user: user._id });
     const code = generateCode(5);
     const savedCode = await new Code({
       code,
@@ -223,7 +223,6 @@ exports.validateResetCode = async (req, res) => {
 };
 
 exports.changePassword = async (req, res) => {
-  
   const { email, password } = req.body;
 
   const cryptedPassword = await bcrypt.hash(password, 12);
@@ -241,37 +240,40 @@ exports.getProfile = async (req, res) => {
     const { username } = req.params;
     const profile = await User.findOne({ username }).select("-password");
     if (!profile) {
-      return res.json({ ok:false});
+      return res.json({ ok: false });
     }
-    const posts =  await Post.find({user: profile._id}).populate("user").sort({createdAt: -1}); 
-    res.json({...profile.toObject(), posts});
+    const posts = await Post.find({ user: profile._id })
+      .populate("user")
+      .sort({ createdAt: -1 });
+    res.json({ ...profile.toObject(), posts });
   } catch (error) {
-    res.status(500).json({ message:error.message });
+    res.status(500).json({ message: error.message });
   }
-
 };
 
 exports.updateProfilePicture = async (req, res) => {
   try {
     const { url } = req.body;
-    await User.findByIdAndUpdate(req.user._id, {
+
+    await User.findByIdAndUpdate(req.user.id, {
       picture: url,
     });
     res.json(url);
-  } catch (error) {    
-    res.status(500).json({ message:error.message });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 exports.updateCover = async (req, res) => {
   try {
     const { url } = req.body;
-    await User.findByIdAndUpdate(req.user._id, {
+
+    await User.findByIdAndUpdate(req.user.id, {
       cover: url,
     });
     res.json(url);
-  } catch (error) {    
-    res.status(500).json({ message:error.message });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -281,7 +283,7 @@ exports.updateDetails = async (req, res) => {
     const updated = await User.findByIdAndUpdate(
       req.user.id,
       {
-        details:infos,
+        details: infos,
       },
       {
         new: true,
@@ -289,7 +291,6 @@ exports.updateDetails = async (req, res) => {
     );
     res.json(updated.details);
   } catch (error) {
-    res.status(500).json({ message:error.message });
+    res.status(500).json({ message: error.message });
   }
 };
-
