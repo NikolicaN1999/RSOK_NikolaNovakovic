@@ -419,7 +419,7 @@ exports.unfollow = async (req, res) => {
         sender.following.includes(receiver._id)
       ) {
         await receiver.updateOne({
-          $push: { followers: sender._id },
+          $pull: { followers: sender._id },
         });
 
         await sender.updateOne({
@@ -442,10 +442,10 @@ exports.acceptRequest = async (req, res) => {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
       if (receiver.requests.includes(sender._id)) {
-        await receiver.update({
+        await receiver.updateOne({
           $push: { friends: sender._id, following: sender._id },
         });
-        await sender.update({
+        await sender.updateOne({
           $push: { friends: receiver._id, followers: receiver._id },
         });
         await receiver.updateOne({
@@ -473,14 +473,14 @@ exports.unfriend = async (req, res) => {
         receiver.friends.includes(sender._id) &&
         sender.friends.includes(receiver._id)
       ) {
-        await receiver.update({
+        await receiver.updateOne({
           $pull: {
             friends: sender._id,
             following: sender._id,
             followers: sender._id,
           },
         });
-        await sender.update({
+        await sender.updateOne({
           $pull: {
             friends: receiver._id,
             following: receiver._id,
@@ -501,22 +501,26 @@ exports.unfriend = async (req, res) => {
 };
 exports.deleteRequest = async (req, res) => {
   try {
+    
     if (req.user.id !== req.params.id) {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
+      
+
       if (receiver.requests.includes(sender._id)) {
-        await receiver.update({
+       
+        await receiver.updateOne({
           $pull: {
             requests: sender._id,
             followers: sender._id,
           },
         });
-        await sender.update({
+        await sender.updateOne({
           $pull: {
             following: receiver._id,
           },
         });
-
+        
         res.json({ message: "delete request accepted" });
       } else {
         return res.status(400).json({ message: "Already deleted" });
