@@ -191,7 +191,7 @@ exports.sendResetPasswordCode = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email }).select("-password");
-    await Code.findOneAndRemove({ user: user._id });
+    await Code.findOneAndDelete({ user: user._id });
     const code = generateCode(5);
     const savedCode = await new Code({
       code,
