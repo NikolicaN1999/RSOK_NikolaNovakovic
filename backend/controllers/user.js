@@ -12,6 +12,7 @@ const cloudinary = require("cloudinary");
 const { generateToken } = require("../helpers/tokens");
 const { sendVerificationEmail, sendResetCode } = require("../helpers/mailer");
 const generateCode = require("../helpers/generateCode");
+const { isErrored } = require("nodemailer/lib/xoauth2");
 exports.register = async (req, res) => {
   try {
     const {
@@ -238,14 +239,39 @@ exports.changePassword = async (req, res) => {
 exports.getProfile = async (req, res) => {
   try {
     const { username } = req.params;
+    const user = await User.findById(req.user.id);
     const profile = await User.findOne({ username }).select("-password");
+    const friendship = {
+      friends: false,
+      following: false,
+      requestSent: false,
+      requestReceived: false,
+    };
     if (!profile) {
       return res.json({ ok: false });
     }
+
+    if (
+      user.friends.includes(profile._id) &&
+      profile.friends.includes(user._id)
+    ) {
+      friendship.friends = true;
+    }
+    if (user.following.includes(profile._id)) {
+      friendship.following = true;
+    }
+    if (user.requests.includes(profile._id)) {
+      friendship.requestReceived = true;
+    }
+    if (profile.requests.includes(user._id)) {
+      friendship.requestSent = true;
+    }
+
     const posts = await Post.find({ user: profile._id })
       .populate("user")
       .sort({ createdAt: -1 });
-    res.json({ ...profile.toObject(), posts });
+
+    res.json({ ...profile.toObject(), posts, friendship });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -456,4 +482,76 @@ exports.acceptRequest = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+exports.unfriend = async (req, res) => {
+  try {
+    if (req.user.id !== req.params.id) {
+      const sender = await User.findById(req.user.id);
+      const receiver = await User.findById(req.params.id);
+      if (receiver.friends.includes(sender._id) &&
+          sender.friends.includes(receiver_.id)){
+        await receiver.update({
+          $pull: { 
+            friends: sender._id, 
+            following: sender._id,
+            followers: sender._id,
+          }
+        });
+        await sender.update({
+          $pull: { 
+            friends: receiver._id, 
+            following: receiver._id,
+            followers: receiver._id,
+          }
+        });
+      
+        res.json({ message: "unfriend request accepted"});
+      }else {
+        return res
+        .status(400)
+        .json({ message: "Already not friends"});
+      }
+    } else {
+      return res
+      .status(400)
+      .json({ message: "You can't unfriend yourself"});
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+exports.deleteRequest = async (req, res) => {
+  try {
+    if (req.user.id !== req.params.id) {
+      const receiver = await User.findById(req.user.id);
+      const sender = await User.findById(req.params.id);
+      if (receiver.requests.includes(sender._id)){
+        await receiver.update({
+          $pull: { 
+            requests: sender._id, 
+            followers: sender._id,
+          }
+        });
+        await sender.update({
+          $pull: { 
+            following: receiver._id,
+           
+          }
+        });
+      
+        res.json({ message: "delete request accepted"});
+      }else {
+        return res
+        .status(400)
+        .json({ message: "Already deleted"});
+      }
+    } else {
+      return res
+      .status(400)
+      .json({ message: "You can't delete yourself"});
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
