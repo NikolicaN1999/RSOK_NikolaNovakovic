@@ -129,7 +129,7 @@ const userSchema = mongoose.Schema({
     savedPosts:[
         {
             post:{
-                type:ObjctId,
+                type:ObjcteId,
                 ref: "Post",
             },
             savedAt:{
