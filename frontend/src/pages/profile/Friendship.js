@@ -158,7 +158,8 @@ export default function Friendship({ friendshipp, profileid }) {
           </div>
         )
       )}
-      {friendship?.following ? (
+   <div className="flex">
+   {friendship?.following ? (
         <button className="gray_btn" onClick={() => unfollowHandler()}>
           <img src="../../../icons/follow.png" alt="" />
           <span>Following</span>
@@ -177,6 +178,7 @@ export default function Friendship({ friendshipp, profileid }) {
         />
         <span>Message</span>
       </button>
+   </div>
     </div>
   );
 }
