@@ -191,7 +191,7 @@ exports.sendResetPasswordCode = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email }).select("-password");
-    await Code.findOneAndDelete({ user: user._id });
+    await Code.findOneAndRemove({ user: user._id });
     const code = generateCode(5);
     const savedCode = await new Code({
       code,
@@ -269,7 +269,7 @@ exports.getProfile = async (req, res) => {
     const posts = await Post.find({ user: profile._id })
       .populate("user")
       .sort({ createdAt: -1 });
-
+    await profile.populate("friends", "first_name last_name username picture");
     res.json({ ...profile.toObject(), posts, friendship });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -501,14 +501,10 @@ exports.unfriend = async (req, res) => {
 };
 exports.deleteRequest = async (req, res) => {
   try {
-    
     if (req.user.id !== req.params.id) {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
-      
-
       if (receiver.requests.includes(sender._id)) {
-       
         await receiver.updateOne({
           $pull: {
             requests: sender._id,
@@ -520,7 +516,7 @@ exports.deleteRequest = async (req, res) => {
             following: receiver._id,
           },
         });
-        
+
         res.json({ message: "delete request accepted" });
       } else {
         return res.status(400).json({ message: "Already deleted" });

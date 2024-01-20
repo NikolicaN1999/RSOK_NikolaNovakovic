@@ -25,7 +25,7 @@
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
-.udpate_cover_wrapper {
+.update_cover_wrapper {
   position: absolute;
   bottom: 1rem;
   right: 1rem;
@@ -325,6 +325,11 @@
   height: 105px;
   object-fit: cover;
   border-radius: 10px;
+}
+.profile_photo_card span {
+  color: var(--color-primary);
+  font-size: 14px;
+  padding-left: 1px;
 }
 .cover_crooper {
   height: 100%;
