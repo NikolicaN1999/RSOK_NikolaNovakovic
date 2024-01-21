@@ -29,9 +29,25 @@ export default function Post({ post, user, profile }) {
     reactPost(post._id, type, user.token);
     if (check == type) {
       setCheck();
+      let index = reacts.findIndex((x) => x.react == check);
+      if (index !== -1){
+        setReacts([...reacts, (reacts[index].count = --reacts[index].count)]);
+        setTotal((prev)=> --prev);
+      }
     } else {
       setCheck(type);
-    }
+      let index = reacts.findIndex((x) => x.react == type);
+      let index1 = reacts.findIndex((x) => x.react == check);
+      if (index !== -1){
+        setReacts([...reacts, (reacts[index].count = ++reacts[index].count)]);
+        setTotal((prev)=> ++prev);
+        console.log(reacts);
+      }
+      if (index1 !== -1){
+        setReacts([...reacts, (reacts[index1].count = --reacts[index1].count)]);
+        setTotal((prev)=> --prev);
+        console.log(reacts);
+      }    }
   };
 console.log(reacts);
   return (
@@ -127,7 +143,10 @@ console.log(reacts);
         <div className="reacts_count">
           <div className="reacts_count_imgs">
             { reacts && 
-            reacts
+            reacts.sort((a, b) => {
+              return b.count - a.count;
+            })
+        
             .slice(0,3)
             .map((react) => (
               react.count > 0 && (
