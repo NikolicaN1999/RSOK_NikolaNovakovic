@@ -9,7 +9,7 @@ import CreatePost from "../../components/createPost";
 import SendVerification from "../../components/home/sendVerification";
 import Post from "../../components/post";
 import { useEffect, useState, useRef } from "react";
-export default function Home({ setVisible, posts, loading }) {
+export default function Home({ setVisible, posts, loading, getAllPosts}) {
   const { user } = useSelector((state) => ({ ...state }));
   const middle = useRef(null);
   const [height, setHeight] = useState();
@@ -18,7 +18,7 @@ export default function Home({ setVisible, posts, loading }) {
   }, [loading, height]);
   return (
     <div className="home" style={{ height: `${height +150}px`}}>
-      <Header page="home"/>
+      <Header page="home" getAllPosts={getAllPosts}/>
       <LeftHome user={user} />
       <div className="home_middle" ref={middle}>
         <Stories />
