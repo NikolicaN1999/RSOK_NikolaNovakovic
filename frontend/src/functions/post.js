@@ -23,7 +23,7 @@ export const createPost = async (
         },
       }
     );
-    return { status: "ok", data};
+    return { status: "ok", data };
   } catch (error) {
     return error.response.data.message;
   }
@@ -79,6 +79,24 @@ export const comment = async (postId, comment, image, token) => {
         },
       }
     );
+    return data;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+export const savePost = async (postId, token) => {
+  try {
+    const { data } = await axios.put(
+      `${process.env.REACT_APP_BACKEND_URL}/savePost/${postId}`,
+      {},
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(data);
     return data;
   } catch (error) {
     return error.response.data.message;
