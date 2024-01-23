@@ -3,6 +3,7 @@
     --bg-secondary: #18191a;
     --bg-third: #3a3b3c;
     --bg-forth: #3a3b3c;
+    --bg-fifth: #888888;
     --color-primary: #e4e6eb;
     --color-secondary: #b0b3b8;
   }
@@ -10,6 +11,9 @@
     background: rgba(1, 1, 1, 0.53);
   }
   .dark .hover1:hover {
+    background: var(--bg-third);
+  }
+  .dark .hover2:hover {
     background: var(--bg-third);
   }
   /* ----Header -----*/
@@ -26,14 +30,55 @@
     fill: var(--blue-color) !important;
   }
   .dark .header_right .circle_icon:hover {
-    background: #888888;
+    background: var(--bg-fifth);
   }
   .dark input[type="text"] {
     color: var(--color-primary);
   }
-  .dark .small_circle i,
+  .dark .small_circle i
+  {
+    filter: invert(100%) !important;
+  } .dark .white_circle svg
+  {
+    filter: invert(100%) !important;
+  }
   .dark .circle i {
     filter: invert(100%) !important;
   }
+  .dark .small_circle svg {
+    filter: invert(100%) !important;
+  }
   /* ----Header -----*/
-  
+  .dark .left_home .small_circle {
+    background: var(--bg-fifth);
+  }
+  .dark .open_post:hover {
+    background: #333;
+  }
+  .dark .post_action i {
+    filter: invert(90%);
+  }
+  .dark .post_menu i{
+    filter: invert(100%);
+  }
+  .dark .post_menu img{
+    filter: invert(100%);
+  }
+  .dark .comment_circle_icon i {
+    filter: invert(95%);
+  }
+  .dark .comment_circle_icon:hover {
+    background: #555;
+  }
+  .dark .box_privacy i {
+    filter: invert(90%);
+  }
+  .dark .box_privacy img{
+    filter: invert(90%);
+  }
+  .dark .emoji_icon_large:hover {
+    filter: invert(0);
+  }
+  .dark .add_pics_wrap i{
+    filter: invert(100%);
+  }
