@@ -49,7 +49,7 @@ function App() {
     }
   };
   return (
-    <div>
+    <div className="dark">
       {visible && (
         <CreatePostPopup
           user={user}
@@ -81,7 +81,7 @@ function App() {
             }
             exact
           />
-           <Route
+          <Route
             path="/friends/:type"
             element={
               <Friends setVisible={setVisible} getAllPosts={getAllPosts} />

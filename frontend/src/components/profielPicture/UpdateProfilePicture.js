@@ -46,7 +46,7 @@ export default function UpdateProfilePicture({
           return img;
         }
       } catch (error) {
-        console.log(error);
+        
       }
     },
     [croppedAreaPixels]

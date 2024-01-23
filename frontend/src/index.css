@@ -24,6 +24,7 @@ a {
   --dark-bg-primary: #18191a;
   --dark-bg-secondary: #242526;
   --dark-bg-third: #3a3b3c;
+  --dark-bg-forth: #3a3b3c;
   --dark-color-primary: #242526;
   --dark-color-secondary: #b0b3b8;
   --blue-color: #1876f2;
@@ -36,7 +37,7 @@ a {
   --shadow-inset: rgba(255, 255, 255, 0.5);
 }
 
-/*---Buttons---*/
+/*----Buttons----*/
 .blue_btn {
   border: none;
   outline: none;
@@ -85,56 +86,53 @@ a {
   gap: 6px;
   cursor: pointer;
 }
-
+.blue_btn,
+.gray_btn span {
+  transform: translateY(-1px);
+}
+/*----Buttons----*/
 .blur {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  background: rgba(255, 255, 255, 0.768);
   bottom: 0;
-  background: rgba(255, 255,255, 0.760);
   z-index: 9999999999;
 }
 
-.blue_btn span {
-  transform: translateY(-1px);
-}
+/*----Buttons----*/
 
-.gray_btn span {
-  transform: translateY(-1px);
-}
-/*---Buttons---*/
-
-/*----Hovers----*/
+/*-----Hovers-----*/
 .hover1:hover {
   background: var(--bg-secondary);
 }
 .hover2:hover {
   background: var(--bg-third);
 }
-
-/*----Hovers----*/
-
-.card{
+.hover3:hover {
+  background: #d4d6da3a;
+}
+/*-----Hovers-----*/
+.card {
   height: 500px;
-  width: 500%;
+  width: 500px;
   background: red;
 }
 
-/*----Scrollbar---*/
-.scrollbar::webkit-scrollbar{
+/*----Scrollbar----*/
+
+.scrollbar::-webkit-scrollbar {
   width: 8px;
 }
-.scrollbar::webkit-scrollbar-thumb{
+.scrollbar::-webkit-scrollbar-thumb {
   background: #aeaeafa1;
   border-radius: 5px;
 }
+/*----Scrollbar----*/
 
-/*----Scrollbar---*/
-
-
-/*----Circles----*/
-.small_circle{
+/*---Circles------*/
+.small_circle {
   position: relative;
   height: 36px;
   width: 36px;
@@ -146,13 +144,12 @@ a {
   background: var(--bg-third);
   cursor: pointer;
 }
-/*----Circles----*/
+/*---Circles------*/
 
-/*---filters---*/
+/*----filters---*/
 .filter_blue {
   filter: invert(39%) sepia(57%) saturate(200%) saturate(200%) saturate(200%)
     saturate(200%) saturate(200%) saturate(147.75%) hue-rotate(202deg)
     brightness(97%) contrast(96%);
 }
-
-/*---filters---*/
+/*----filters---*/

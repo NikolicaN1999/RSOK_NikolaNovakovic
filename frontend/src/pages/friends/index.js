@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 export default function Friends() {
   const { user } = useSelector((state) => ({ ...state }));
   const { type } = useParams();
-  console.log(type);
+  
 
   const [{ loading, error, data }, dispatch] = useReducer(friendspage, {
     loading: false,

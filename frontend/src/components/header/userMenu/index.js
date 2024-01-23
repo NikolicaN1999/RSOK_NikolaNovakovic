@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SettingsPrivacy from "./SettingsPrivacy";
+import DisplayAccessibility from "./DisplayAccessibility";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 
@@ -51,6 +52,20 @@ export default function UserMenu({ user }) {
               <i className="right_icon"></i>
             </div>
           </div>
+          <div
+            className="mmenu_item hover3"
+            onClick={() => {
+              setVisible(2);
+            }}
+          >
+            <div className="small_circle">
+              <i className="dark_filled_icon"></i>
+            </div>
+            <span>Display & Accessibility</span>
+            <div className="rArrow">
+              <i className="right_icon"></i>
+            </div>
+          </div>
           <div className="mmenu_item hover3" onClick={()=>{logout();}}>
             <div className="small_circle">
               <i className="logout_filled_icon"></i>
@@ -60,6 +75,7 @@ export default function UserMenu({ user }) {
         </div>
       )}
       {visible === 1 && <SettingsPrivacy setVisible={setVisible}/>}
+      {visible === 2 && <DisplayAccessibility setVisible={setVisible} />}
     </div>
   );
 }
