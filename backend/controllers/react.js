@@ -6,7 +6,8 @@ exports.reactPost = async (req, res) => {
     const { postId, react } = req.body;
     const check = await React.findOne({
       postRef: postId,
-      reactBy: mongoose.Types.ObjectId(req.user.id),
+      reactBy: mongoose.Types.ObjectId.createFromHexString(req.user.id),
+
     });
     if (check == null) {
       const newReact = new React({
@@ -17,7 +18,7 @@ exports.reactPost = async (req, res) => {
       await newReact.save();
     } else {
       if (check.react == react) {
-        await React.findByIdAndRemove(check._id);
+        await React.findByIdAndDelete(check._id);
       } else {
         await React.findByIdAndUpdate(check._id, {
           react: react,
