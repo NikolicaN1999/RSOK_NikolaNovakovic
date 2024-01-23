@@ -55,15 +55,6 @@ export default function Friends() {
             </div>
             <div className="mmenu_item hover3">
               <div className="small_circle">
-                <i className="friends_requests_icon"></i>
-              </div>
-              <span>Sent Requests</span>
-              <div className="rArrow">
-                <i className="right_icon"></i>
-              </div>
-            </div>
-            <div className="mmenu_item hover3">
-              <div className="small_circle">
                 <i className="friends_suggestions_icon"></i>
               </div>
               <span>Suggestions</span>
@@ -76,24 +67,6 @@ export default function Friends() {
                 <i className="all_friends_icon"></i>
               </div>
               <span>All Friends</span>
-              <div className="rArrow">
-                <i className="right_icon"></i>
-              </div>
-            </div>
-            <div className="mmenu_item hover3">
-              <div className="small_circle">
-                <i className="birthdays_icon"></i>
-              </div>
-              <span>Birthdays</span>
-              <div className="rArrow">
-                <i className="right_icon"></i>
-              </div>
-            </div>
-            <div className="mmenu_item hover3">
-              <div className="small_circle">
-                <i className="all_friends_icon"></i>
-              </div>
-              <span>Custom Lists</span>
               <div className="rArrow">
                 <i className="right_icon"></i>
               </div>

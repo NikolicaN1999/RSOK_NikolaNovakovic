@@ -87,10 +87,11 @@ const userSchema = mongoose.Schema(
     ],
     requests: [
       {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
-    ],
+    ]
+    ,
     search: [
       {
         user: {

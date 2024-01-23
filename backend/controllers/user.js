@@ -352,6 +352,10 @@ exports.addFriend = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+ 
+
 exports.cancelRequest = async (req, res) => {
   try {
     if (req.user.id !== req.params.id) {
@@ -598,17 +602,15 @@ exports.removeFromSearch = async (req, res) => {
 exports.getFriendsPageInfos = async (req, res) => {
   try {
     const user = await User.findById(req.user.id)
-      .select("friends requests")
+    .select("friends requests")
       .populate("friends", "first_name last_name picture username")
       .populate("requests", "first_name last_name picture username");
-    const sentRequests = await User.find({
-      requests: mongoose.Types.ObjectId(req.user.id),
-    }).select("first_name last_name picture username");
-    res.json({
-      friends: user.friends,
-      requests: user.requests,
-      sentRequests,
-    });
+      
+      res.json({
+        friends: user.friends,
+        requests: user.requests,
+       
+      });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
