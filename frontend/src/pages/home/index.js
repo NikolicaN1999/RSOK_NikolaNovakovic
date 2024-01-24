@@ -25,10 +25,12 @@ export default function Home({ setVisible, posts, loading, getAllPosts}) {
         <Stories />
         {
           user.verified === false && <SendVerification user={user}/>
+        //prikazuje srednji deo sa Stories, postovima, i opcionalno SendVerification komponentom 
         }
+        
         <CreatePost user={user} setVisible={setVisible}/>
         {
-          loading ? (<div className="sekelton_loader">
+          loading ? (<div className="skeleton_loader">
             <HashLoader color="#1876f2" />
           </div>
           ):(

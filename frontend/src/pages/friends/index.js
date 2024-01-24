@@ -7,6 +7,7 @@ import Card from "./Card";
 import "./style.css";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+//funkcionalna komponenta koja prikazuje prijatelje korisnika
 export default function Friends() {
   const { user } = useSelector((state) => ({ ...state }));
   const { type } = useParams();
@@ -20,6 +21,7 @@ export default function Friends() {
   useEffect(() => {
     getData();
   }, []);
+// funkcija za dobijanje podataka o prijateljima
   const getData = async () => {
     dispatch({ type: "FRIENDS_REQUEST" });
     const data = await getFriendsPageInfos(user.token);

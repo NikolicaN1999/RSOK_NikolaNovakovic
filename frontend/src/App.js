@@ -22,6 +22,7 @@ function App() {
     error: "",
   });
   useEffect(() => {
+  //funkcija za dohvatanje svih postova
     getAllPosts();
   }, []);
   const getAllPosts = async () => {

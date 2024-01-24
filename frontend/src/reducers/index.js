@@ -3,7 +3,7 @@ import { userReducer } from "./userReducer";
 import { themeReducer } from "./themeReducer";
 
 
-
+//kreiranje glavnog reducera
     const rootReducer = combineReducers({
         user: userReducer,
         darkTheme: themeReducer,

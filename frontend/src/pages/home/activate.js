@@ -25,11 +25,13 @@ export default function Activate() {
  const activateAccount = async()=>{
     try {
         setLoading(true);
+     // pozivanje API endpointa za aktivaciju naloga
         const {data} = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/activate`, {token}, {
             headers:{
                 Authorization : `Bearer ${user.token}`,
             },
         });
+    // postavljanje poruke o uspesnoj aktivaciji
         setSuccess(data.message);
         Cookies.set('user', JSON.stringify({...user, verified:true}));
         dispatch({
@@ -39,6 +41,7 @@ export default function Activate() {
         navigate("/");
         },3000);
     } catch (error) {
+    // postavljanje poruke o neuspesnoj aktivaciji
         setError (error.response.data.message);
         setTimeout(()=>{
             navigate("/");
@@ -65,6 +68,7 @@ export default function Activate() {
         />
       )}
       <Header />
+    
       <LeftHome user={user} />
       <div className="home_middle">
         <Stories />

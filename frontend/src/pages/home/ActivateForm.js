@@ -1,4 +1,5 @@
 import PropagateLoader from "react-spinners/PropagateLoader";
+//funkcionalna komponenta koja prikazuje formu za aktivaciju naloga
 export default function ActivateForm({ type, header, text, loading }) {
   return (
     <div className="blur">

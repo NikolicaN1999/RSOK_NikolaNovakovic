@@ -4,12 +4,14 @@ import { acceptRequest, deleteRequest } from "../../functions/user";
 
 export default function Card({ userr, type, getData }) {
   const { user } = useSelector((state) => ({ ...state }));
+  //funkcija za potvrdu prijateljstva sa korisnikom
   const confirmHandler = async(userId) => {
     const res = await acceptRequest(userId, user.token);
     if ( res == "ok") {
       getData();
     }
   };
+   //funkcija za brisanje zahteva za prijateljstvo
   const deleteHandler = async(userId) => {
     const res = await deleteRequest(userId, user.token);
     if ( res == "ok") {

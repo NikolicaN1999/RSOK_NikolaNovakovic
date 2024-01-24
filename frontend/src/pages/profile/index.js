@@ -20,6 +20,7 @@ import CreatePostPopup from "../../components/createPostPopup";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { HashLoader } from "react-spinners";
+//funkcionalna komponenta za prikazivanje korisnickog profila
 export default function Profile({ getAllPosts }) {
   const [visible, setVisible] = useState(false);
   const { username } = useParams();
@@ -33,9 +34,11 @@ export default function Profile({ getAllPosts }) {
     profile: {},
     error: "",
   });
+//izvrsava se prilikom promene korisnickog imena
   useEffect(() => {
     getProfile();
   }, [userName]);
+//izvrsava se prilikom promene profila
   useEffect(() => {
     setOthername(profile?.details?.otherName);
   }, [profile]);
@@ -93,6 +96,7 @@ export default function Profile({ getAllPosts }) {
   const [height, setHeight] = useState();
   const [leftHeight, setLeftHeight] = useState();
   const [scrollHeight, setScrollHeight] = useState();
+//efekat koji se izvrsava prilikom promene visine profila ili skrolovanja
   useEffect(() => {
     setHeight(profileTop.current.clientHeight + 300);
     setLeftHeight(leftSide.current.clientHeight);
@@ -245,7 +249,7 @@ export default function Profile({ getAllPosts }) {
                   <>
                     <div className="profile_card">
                       <div className="profile_card_header">Intro</div>
-                      <div className="sekelton_loader">
+                      <div className="skeleton_loader">
                         <HashLoader color="#1876f2" />
                       </div>
                     </div>
@@ -256,7 +260,7 @@ export default function Profile({ getAllPosts }) {
                           See all photos
                         </div>
                       </div>
-                      <div className="sekelton_loader">
+                      <div className="skeleton_loader">
                         <HashLoader color="#1876f2" />
                       </div>
                     </div>
@@ -267,7 +271,7 @@ export default function Profile({ getAllPosts }) {
                           See all friends
                         </div>
                       </div>
-                      <div className="sekelton_loader">
+                      <div className="skeleton_loader">
                         <HashLoader color="#1876f2" />
                       </div>
                     </div>
