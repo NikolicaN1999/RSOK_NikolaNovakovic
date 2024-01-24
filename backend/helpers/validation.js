@@ -2,7 +2,9 @@ const User = require("../models/User");
 
 exports.validateEmail = (email) => {
   return String(email)
+  //pretvara sve karaktere u malo slovo
     .toLowerCase()
+  //regularni izraz za proveru da li uneti string odgovara obliku email adrese
     .match(/^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,12})(\.[a-z]{2,12})?$/);
 };
 exports.validateLength = (text, min, max) => {

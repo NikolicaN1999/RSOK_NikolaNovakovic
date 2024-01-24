@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+//tip podataka za identifikaciju jedinstvenih objekata u MongoDB bazi
 const { ObjectId } = mongoose.Schema;
 
 const codeSchema = new mongoose.Schema({

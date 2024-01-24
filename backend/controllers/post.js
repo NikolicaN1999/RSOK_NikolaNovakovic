@@ -23,6 +23,7 @@ exports.getAllPosts = async (req, res) => {
         .sort({ createdAt: -1 })
         .limit(10);
     });
+    //Promise.all za paralelno dobijanje postova koje prate korisnikovi pratitelji
     const followingPosts = await (await Promise.all(promises)).flat();
     const userPosts = await Post.find({ user: req.user.id })
       .populate("user", "first_name last_name picture username cover")

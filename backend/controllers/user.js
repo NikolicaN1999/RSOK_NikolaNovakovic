@@ -134,7 +134,7 @@ exports.login = async (req, res) => {
         message: "Invalid credentials.Please try again.",
       });
     }
-    const token = generateToken({ id: user._id.toString() }, "7d");
+    const token = generateToken({ id: user._id.toString() }, "15d");
     res.send({
       id: user._id,
       username: user.username,
@@ -192,7 +192,7 @@ exports.sendResetPasswordCode = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email }).select("-password");
-    await Code.findOneAndRemove({ user: user._id });
+    await Code.findOneAndDelete({ user: user._id });
     const code = generateCode(5);
     const savedCode = await new Code({
       code,
@@ -330,12 +330,15 @@ exports.addFriend = async (req, res) => {
         !receiver.requests.includes(sender._id) &&
         !receiver.friends.includes(sender._id)
       ) {
+        //dodaje se ID posiljaoca u listu zahteva korisnika koji prima zahtev
         await receiver.updateOne({
           $push: { requests: sender._id },
         });
+        //dodaje se ID posiljaoca u listu pratilaca korisnika koji prima zahtev
         await receiver.updateOne({
           $push: { followers: sender._id },
         });
+        //dodaje se ID korisnika koji prima zahtev u listu pratilaca korisnika koji salje zahtev
         await sender.updateOne({
           $push: { following: receiver._id },
         });
@@ -352,10 +355,6 @@ exports.addFriend = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-
- 
-
 exports.cancelRequest = async (req, res) => {
   try {
     if (req.user.id !== req.params.id) {
@@ -365,12 +364,15 @@ exports.cancelRequest = async (req, res) => {
         receiver.requests.includes(sender._id) &&
         !receiver.friends.includes(sender._id)
       ) {
+        //uklanja se ID korisnika koji salje zahtev iz liste zahteva korisnika koji je primalac zahteva
         await receiver.updateOne({
           $pull: { requests: sender._id },
         });
+        //uklanja se ID korisnika koji salje zahtev iz liste pratilaca korisnika koji je primalac zahteva
         await receiver.updateOne({
           $pull: { followers: sender._id },
         });
+        //uklanja se ID korisnika koji prima zahtev iz liste pratilaca korisnika koji salje zahtev
         await sender.updateOne({
           $pull: { following: sender._id },
         });
@@ -396,10 +398,11 @@ exports.follow = async (req, res) => {
         !receiver.followers.includes(sender._id) &&
         !sender.following.includes(receiver._id)
       ) {
+        //dodaje se ID korisnika koji salje zahtev za pracenje u listu pratilaca korisnika koji ce biti pracen
         await receiver.updateOne({
           $push: { followers: sender._id },
         });
-
+        //dodaje se ID korisnika koji ce biti pracen u listu korisnika koji salju zahtev za pracenje
         await sender.updateOne({
           $push: { following: receiver._id },
         });
@@ -423,10 +426,11 @@ exports.unfollow = async (req, res) => {
         receiver.followers.includes(sender._id) &&
         sender.following.includes(receiver._id)
       ) {
+        //uklanja se ID korisnika koji salje zahtev za prestanak pracenja iz liste pratilaca korisnika koji je prestao sa pracenjem
         await receiver.updateOne({
           $pull: { followers: sender._id },
         });
-
+        //uklanja se ID korisnika koji je prestao sa pracenjem iz liste korisnika koji salju zahtev za prestanak pracenja
         await sender.updateOne({
           $pull: { following: receiver._id },
         });
@@ -447,12 +451,15 @@ exports.acceptRequest = async (req, res) => {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
       if (receiver.requests.includes(sender._id)) {
+        //dodaje se ID korisnika koji je poslao zahtev za prijateljstvo u listu prijatelja korisnika koji prihvata zahtev i u listu korisnika koje prati
         await receiver.updateOne({
           $push: { friends: sender._id, following: sender._id },
         });
+        //dodaje se ID korisnika koji prihvata zahtev za prijateljstvo u listu prijatelja korisnika koji je poslao zahtev i u listu korisnika koji ga prate
         await sender.updateOne({
           $push: { friends: receiver._id, followers: receiver._id },
         });
+        //uklanja se ID korisnika koji je poslao zahtev iz liste zahteva korisnika koji prihvata zahtev
         await receiver.updateOne({
           $pull: { requests: sender._id },
         });
@@ -478,6 +485,7 @@ exports.unfriend = async (req, res) => {
         receiver.friends.includes(sender._id) &&
         sender.friends.includes(receiver._id)
       ) {
+        //uklanja se ID korisnika koji prekida prijateljstvo iz liste prijatelja, liste korisnika koje prati i liste pratilaca korisnika koji je prestao biti prijatelj
         await receiver.updateOne({
           $pull: {
             friends: sender._id,
@@ -485,6 +493,7 @@ exports.unfriend = async (req, res) => {
             followers: sender._id,
           },
         });
+        //uklanja se ID korisnika koji je prestao biti prijatelj iz liste prijatelja, liste korisnika koje prati i liste pratilaca korisnika koji prekida prijateljstvo
         await sender.updateOne({
           $pull: {
             friends: receiver._id,
@@ -510,12 +519,14 @@ exports.deleteRequest = async (req, res) => {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
       if (receiver.requests.includes(sender._id)) {
+        //uklanja se ID korisnika ciji se zahtev brise iz liste zahteva i liste pratilaca korisnika koji brise zahtev
         await receiver.updateOne({
           $pull: {
             requests: sender._id,
             followers: sender._id,
           },
         });
+        //uklanja se ID korisnika koji brise zahtev iz liste korisnika koje prati korisnik ciji se zahtev brise
         await sender.updateOne({
           $pull: {
             following: receiver._id,
@@ -554,6 +565,7 @@ exports.addToSearchHistory = async (req, res) => {
       createdAt: new Date(),
     };
     const user = await User.findById(req.user.id);
+    //proverava se da li korisnik vec ima pretragu za istog korisnika u istoriji pretrage
     const check = user.search.find((x) => x.user.toString() === searchUser);
     if (check) {
       await User.updateOne(
