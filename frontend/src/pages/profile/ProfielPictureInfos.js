@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import ProfilePicture from "../../components/profielPicture";
 import Friendship from "./Friendship";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 export default function ProfielPictureInfos({
   profile,
   visitor,
@@ -38,35 +38,30 @@ export default function ProfielPictureInfos({
             <div className="othername">{othername && `(${othername})`}</div>
           </div>
           <div className="profile_friend_count">
-          {profile?.friends && (
-        <div className="profile_card_count">
-          {profile?.friends.length === 0
-            ? ""
-            : profile?.friends.length === 1
-            ? "1 Friend"
-            : `${profile?.friends.length} Friends`}
-        </div>
-      )}
+            {profile?.friends && (
+              <div className="profile_card_count">
+                {profile?.friends.length === 0
+                  ? ""
+                  : profile?.friends.length === 1
+                  ? "1 Friend"
+                  : `${profile?.friends.length} Friends`}
+              </div>
+            )}
           </div>
           <div className="profile_friend_imgs">
-            
-              {profile?.friends &&
-              profile.friends
-              .slice(0, 6)
-              .map((friend, i) => (
-               <Link to={`/profile/${friend.username}`} key={i} >
-                 <img 
-                  src={friend.picture} 
-                  alt="" 
-                  style={{ 
-                    transform: `translateX(${-i *7 }px)`,
-                    zIndex: `${i}`, 
-                }}
+            {profile?.friends &&
+              profile.friends.slice(0, 6).map((friend, i) => (
+                <Link to={`/profile/${friend.username}`} key={i}>
+                  <img
+                    src={friend.picture}
+                    alt=""
+                    style={{
+                      transform: `translateX(${-i * 7}px)`,
+                      zIndex: `${i}`,
+                    }}
                   />
-               </Link>
-
-              ))
-              }
+                </Link>
+              ))}
           </div>
         </div>
       </div>
