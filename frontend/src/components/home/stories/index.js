@@ -21,7 +21,7 @@ export default function Stories() {
     <div className="stories">
       <div className="create_story_card">
         <img
-          src="../../../images/default_pic.png"
+          src="../../../images/default_pic.jpg"
           alt=""
           className="create_story_img"
         />
