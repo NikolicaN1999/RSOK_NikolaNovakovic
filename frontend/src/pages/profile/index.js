@@ -314,19 +314,20 @@ export default function Profile({ getAllPosts }) {
                 )}
                 
                 {loading ? (
-                  <div className="sekelton_loader">
+                  <div className="skeleton_loader">
                     <HashLoader color="#1876f2" />
                   </div>
                 ) : (
                   <div className="posts">
-                    {profile.posts && profile.posts.length ? (
-                      profile.posts.map((post) => (
-                        <Post post={post} user={user} key={post._id} profile />
-                      ))
-                    ) : (
-                      <div className="no_posts">No posts available</div>
-                    )}
-                  </div>
+                  {profile.posts && profile.posts.length ? (
+                    profile.posts.map((post) => (
+                      <Post post={post} user={user} key={post._id} profile />
+                    ))
+                  ) : (
+                    <div className="no_posts">No posts available</div>
+                  )}
+                </div>
+                
                 )}
               </div>
             </div>

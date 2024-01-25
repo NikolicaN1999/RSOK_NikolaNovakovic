@@ -46,7 +46,7 @@ export default function UpdateProfilePicture({
           return img;
         }
       } catch (error) {
-        
+        console.log(error);
       }
     },
     [croppedAreaPixels]
@@ -74,7 +74,7 @@ export default function UpdateProfilePicture({
           user.id,
           user.token
         );
-        if (new_post === "ok") {
+        if (new_post.status === "ok") {
           setLoading(false);
           setImage("");
           pRef.current.style.backgroundImage = `url(${res[0].url})`;

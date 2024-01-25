@@ -1,4 +1,5 @@
 import axios from "axios";
+
 export const updateprofilePicture = async (url, token) => {
   try {
     const { data } = await axios.put(
@@ -17,6 +18,7 @@ export const updateprofilePicture = async (url, token) => {
     return error.response.data.message;
   }
 };
+
 export const updateCover = async (url, token) => {
   try {
     const { data } = await axios.put(
